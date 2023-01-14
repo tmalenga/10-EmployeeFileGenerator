@@ -2,7 +2,8 @@ class Employee{
     constructor(id, name, email){
         this.id = id;
         this.name = name;
-        this.email = email;        
+        this.email = email;   
+        this.role = "Employee";     
     }
 
     getName(){
@@ -14,7 +15,9 @@ class Employee{
     getEmail(){
         return this.email;
     }
-    getRole(){}
+    getRole(){
+        return this.role;
+    }
 }
 
 const employee_1 = new Employee(100, "Becky", "beack@re")
