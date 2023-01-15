@@ -37,14 +37,14 @@ const questions =
 
 ];
 
-// const managerQuestions = [
-//     {
-//         type: "input",
-//         message: "Enter office number:  ",
-//         name: "officeNumber"
+const managerQuestions = [
+    {
+        type: "input",
+        message: "Enter office number:  ",
+        name: "officeNumber"
 
-//     }
-// ]
+    }
+]
 
 //Function to run app
 function init(){
@@ -52,7 +52,8 @@ function init(){
     .then(function(data){
         console.log(data.role);
         if (data.role == "Manager"){
-            console.log("Yay")           
+            console.log("Yay")
+            createManager()           
             }
         } )
         // create function to call questions for ea employee role 
@@ -62,6 +63,9 @@ function init(){
             
 
 function createManager(){
+    let officeNum = inquirer.prompt(managerQuestions)
+    //let newManager = new Manager(data.id, data.name, data.email, data.role, officeNum);      
+    //console.log(officeNumber)
 
 }
 
