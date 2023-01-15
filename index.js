@@ -40,9 +40,13 @@ const questions = async () => {
             name: "role",
         },
     ])
+    console.log(userInput)
 
-    
+
 };
+
+questions();
+
 
 // } 
 
