@@ -52,8 +52,11 @@ function init(){
     .then(function(data){
         console.log(data.role);
         if (data.role == "Manager"){
-            console.log("Yay")
-            createManager()           
+            // inquirer.prompt(managerQuestions)
+            // .then(function(resp){
+            //     console.log(resp.officeNumber);
+            // })
+            createManager(data);          
             }
         } )
         // create function to call questions for ea employee role 
@@ -62,10 +65,15 @@ function init(){
     }
             
 
-function createManager(){
-    let officeNum = inquirer.prompt(managerQuestions)
+function createManager(data){
+    //let officeNum = inquirer.prompt(managerQuestions)
     //let newManager = new Manager(data.id, data.name, data.email, data.role, officeNum);      
     //console.log(officeNumber)
+    inquirer.prompt(managerQuestions)
+    .then(function(resp){
+        console.log(resp.officeNumber, data.email);
+    })
+
 
 }
 
