@@ -20,7 +20,7 @@ class Employee{
     }
 }
 
-const employee_1 = new Employee(100, "Becky", "beack@re")
-console.log(employee_1)
+// const employee_1 = new Employee(100, "Becky", "beack@re")
+// console.log(employee_1)
 
 module.exports = Employee

@@ -33,22 +33,36 @@ const questions =
         message: "Employee Role:  ",
         choices: ["Manager", "Engineer", "Intern", "None"],
         name: "role",
-    }
+    },
 
 ];
 
-const managerQuestions = [
-    {
-        type: "input",
-        message: "Enter office number:  ",
-        name: "officeNumber"
+// const managerQuestions = [
+//     {
+//         type: "input",
+//         message: "Enter office number:  ",
+//         name: "officeNumber"
 
-    }
-]
+//     }
+// ]
 
 //Function to run app
 function init(){
     inquirer.prompt(questions)
+    .then(function(data){
+        console.log(data.role);
+        if (data.role == "Manager"){
+            console.log("Yay")           
+            }
+        } )
+        // create function to call questions for ea employee role 
+        // create Team array and upend objects into team array
+        // Use team array to create HTML - I think!!!!
+    }
+            
+
+function createManager(){
+
 }
 
 // calling the app
