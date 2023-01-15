@@ -40,7 +40,22 @@ const questions = async () => {
             name: "role",
         },
     ])
-    console.log(userInput)
+    //console.log(userInput);
+
+    if (userInput.role == "Manager") {
+        const managerQuestions = await inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What is your office number",
+              name: "officeNumber",
+            },
+          ])
+        //   const newMdfdfgd = new Manager(userInput.id, userInput.name, userInput.email, userInput.role, managerQuestions.officeNumber)
+           const newManager = new Manager(userInput.id, userInput.name, userInput.email, userInput.role, managerQuestions.officeNumber);
+           teamMember.push(newManager);
+    }
+    console.log("----> " + teamMember);
 
 
 };
