@@ -55,7 +55,7 @@ const questions = async () => {
            const newManager = new Manager(userInput.id, userInput.name, userInput.email, userInput.role, managerQuestions.officeNumber);
            teamMember.push(newManager);
     }
-        else if (userInput.role === "Engineer") {
+    else if (userInput.role === "Engineer") {
         const engineerQuestions = await inquirer
           .prompt([
             {
@@ -64,9 +64,21 @@ const questions = async () => {
               name: "github",
             }
           ])
-            const newEngineer = new Engineer( userInput.id, userInput.name, userInput.email, userInput.role, engineerQuestions.github);
-            teamMember.push(newEngineer);
-        }
+          const newEngineer = new Engineer( userInput.id, userInput.name, userInput.email, userInput.role, engineerQuestions.github);
+          teamMember.push(newEngineer);
+    }
+    else if (userInput.role === "Intern") {
+        const internQuestions = await inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What university did you attend?",
+              name: "school",
+            },
+          ])                   
+          const newIntern = new Intern(userInput.id, userInput.name, userInput.email, userInput.role, internQuestions.school);
+          teamMember.push(newIntern);          
+    } 
    
 
 
