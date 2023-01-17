@@ -6,7 +6,7 @@ const Employee = require('./employee_lib/Employee');
 const Engineer = require('./employee_lib/Engineer');
 const Intern = require('./employee_lib/Intern');
 const Manager = require('./employee_lib/Manager');
-const generateTeam = require('./src/template')
+const generateTeam = require("./src/template");
 
 //Array to store team member objects
 const teamMember = [];
@@ -55,15 +55,54 @@ const questions = async () => {
            const newManager = new Manager(userInput.id, userInput.name, userInput.email, userInput.role, managerQuestions.officeNumber);
            teamMember.push(newManager);
     }
-    console.log("----> " + teamMember);
+        else if (userInput.role === "Engineer") {
+        const engineerQuestions = await inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What is your GitHub user name?",
+              name: "github",
+            }
+          ])
+            const newEngineer = new Engineer( userInput.id, userInput.name, userInput.email, userInput.role, engineerQuestions.github);
+            teamMember.push(newEngineer);
+        }
+   
 
 
 };
+//// ------******
 
-questions();
+async function promptQuestions() {
+    await questions()     
+    
+    const addMemberAns = await inquirer
+      .prompt([
+        {
+          name:'addMember',
+          type: 'list',
+          choices: ['Add a new member', 'Create team'],
+          message: "What would you like to do next?"
+        }
+      ])
+  
+      if (addMemberAns.addMember === 'Add a new member') {
+        return promptQuestions()
+      }
+      return createTeam();
+  }  
+  
+  promptQuestions();
+  
+  function createTeam () {
+    console.log(teamMember)
+    }
 
 
-// } 
+
+
+
+// }
 
 // const managerQuestions = [
 //     {
@@ -118,4 +157,4 @@ questions();
 
 // // calling the app
 // init();
-// //makeTeam();
+// //makeTeam()

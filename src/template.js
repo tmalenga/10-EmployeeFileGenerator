@@ -1,7 +1,7 @@
 // create the team
-const generateTeam = (teamProfile) => {
+const generateTeam = (teamMember) => {
     // create the manager html
-    const generateManager = (manager) => {
+    const generateManager = (Manager) => {
       return `
         <div class="card employee-card">
         <div class="card-header">
@@ -16,6 +16,5 @@ const generateTeam = (teamProfile) => {
             </ul>
         </div>
       </div>`;
-    }
+    };
 }
-    
