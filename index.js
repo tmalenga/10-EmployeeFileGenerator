@@ -6,23 +6,25 @@ const Employee = require('./employee_lib/Employee');
 const Engineer = require('./employee_lib/Engineer');
 const Intern = require('./employee_lib/Intern');
 const Manager = require('./employee_lib/Manager');
-const generateTeam = require("./src/template");
 
 //Array to store team member objects
-const teamMember = [];
+const teamMembers = [];
 
-async function init() {
-   
+// Node v10+ includes a promises module as an alternative to using callbacks with file system methods.
+// const { writeFile } = require('fs').promises;
+
+//Questions to prompt the user and generate the 
+async function init() {   
     const addMember = await inquirer
       .prompt([
         {
           name:'userInput',
           type: 'list',
-          choices: ['Manager', 'Engineer', 'Intern', 'Create Team'],
+          choices: ['Manager', 'Engineer', 'Intern'],
           message: "Select what team member you would like to add or whether you would like to create the team:"
         }
       ])
-  
+      
       if (addMember.userInput === 'Manager') {
         //return createManager()
         const managerAns = await inquirer.prompt([
@@ -57,12 +59,12 @@ async function init() {
         },
       ])     
       const newManager = new Manager(managerAns.id, managerAns.name, managerAns.email, addMember.userInput, managerAns.officeNumber);
-      teamMember.push(newManager);
+      teamMembers.push(newManager);
 
       if (managerAns.nextStep == 'Add Team Member'){
         init()
       }else{
-        createTeam()
+        createTeam(teamMembers)
       }
         
       }
@@ -100,11 +102,11 @@ async function init() {
 
       ])
       const newEngineer = new Engineer(engineerAns.id, engineerAns.name, engineerAns.email, addMember.userInput, engineerAns.github);
-      teamMember.push(newEngineer);
+      teamMembers.push(newEngineer);
       if (engineerAns.nextStep === 'Add Team Member'){
         init()
       }else{
-        createTeam()
+        createTeam(teamMembers)
       }
 
     }
@@ -142,80 +144,152 @@ async function init() {
 
     ])
     const newIntern = new Intern(internAns.id, internAns.name, internAns.email, addMember.userInput, internAns.school);
-    teamMember.push(newIntern);
+    teamMembers.push(newIntern);
     if (internAns.nextStep === 'Add Team Member'){
       init()
     }else{
-      createTeam()
+      createTeam(teamMembers)
     }
 
   } 
-} 
+}
+ 
   init();
+ 
+const generateTeam = (team) => {
+  const [engineers, managers, interns] = [getEngineers(team), getManagers(team), getInterns(team)];
 
-  function createTeam () {
-    console.log(teamMember);
-    fs.writeFileSync(
-      "./index.html", generateTeam(teamMember));
+  // const managersTemplateArray = managers.map(manager => managerHTML(manager));
+  // const managersTemplate = managersTemplateArray.join('');
+
+  const managersTemplate = managers.map(managerHTML).join('');
+  const engineersTemplate = engineers.map(engineerHTML).join('');
+  const internsTemplate = interns.map(internHTML).join('');
+  //const teamHTML = [managersTemplate, engineersTemplate, internsTemplate].join();
+ return `
+      <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <title>Team</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" 
+       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+      <link rel="stylesheet" href="style.css">
+      
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div class="row" id="header">
+            <div class="col-12 jumbotron mb-3 team-heading">
+                <h1 class ="text-center">Team Portfolio</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+      <div class="row">
+      <div class="team-area col-12 d-flex justify-content-center">
+       ${managersTemplate}              
+      </div>
+    </div>
+    </div>
+    <div class="container">
+      <div class="row">
+      <div class="team-area col-12 d-flex justify-content-center">
+       ${engineersTemplate}              
+      </div>
+      </div>
+    </div>
+    <div class="container">
+    <div class="row">
+      <div class="team-area col-12 d-flex justify-content-center">
+       ${internsTemplate}              
+      </div>
+      </div>
+    </div>
+  </body>
+</html>
+      `;
+ };
+  
+  function createTeam (teamMembers) {
+    fs.writeFileSync("index.html", generateTeam(teamMembers));
     }
 
+function getManagers(teamMembers){  
+  return teamMembers.filter(employee => {if (employee.getRole() === "Manager"){
+    return true;
+    
+  }}) 
+
+};
+
+function getEngineers(teamMembers){
+  return teamMembers.filter(employee => {if (employee.getRole() === "Engineer"){
+    return true;
+  }}) 
+
+};
+
+function getInterns(teamMembers){
+  return teamMembers.filter(employee => {if (employee.getRole() === "Intern"){
+    return true;
+  }}) 
+
+};
+
+function managerHTML(manager){
+  
+  return ` 
+  <div class="card employee">
+  <div class="card-header">
+      <h2 class="card-title">${manager.getName()}</h2>
+      <h3 class="card-title">${manager.getRole()}</h3>
+  </div>
+  <div class="card-body">
+      <ul class="list-items">
+          <li class="list-items">ID: ${manager.getId()}</li>
+          <li class="list-items">Email: <a href="mailto:${manager.getEmail()}">${manager.getEmail()}</a></li>
+          <li class="list-items">Office number: ${manager.getOfficeNumber()}</li>
+      </ul>
+  </div>
+</div>`;
+
+}
+
+function engineerHTML(engineer){
+  
+  return `<div class="card employee">
+  <div class="card-header">
+      <h2 class="card-title">${engineer.getName()}</h2>
+      <h3 class="card-title">${engineer.getRole()}</h3>
+  </div>
+  <div class="card-body">
+      <ul class="list-items">
+          <li class="list-items">ID: ${engineer.getId()}</li>
+          <li class="list-items">Email: <a href="mailto:${engineer.getEmail()}">${engineer.getEmail()}</a></li>
+          <li class="list-items">Github: ${engineer.getGithub()}</li>
+      </ul>
+  </div>
+</div>`;
+}
+
+function internHTML(intern){
+  
+  return `<div class="card employee">
+  <div class="card-header">
+      <h2 class="card-title">${intern.getName()}</h2>
+      <h3 class="card-title">${intern.getRole()}</h3>
+  </div>
+  <div class="card-body">
+      <ul class="list-items">
+          <li class="list-items">ID: ${intern.getId()}</li>
+          <li class="list-items">Email: <a href="mailto:${intern.getEmail()}">${intern.getEmail()}</a></li>
+          <li class="list-items">School: ${intern.getSchool()}</li>
+      </ul>
+  </div>
+</div>`;
+}
 
 
-
-
-// }
-
-// const managerQuestions = [
-//     {
-//         type: "input",
-//         message: "Enter office number:  ",
-//         name: "officeNumber"
-
-//     }
-// ]
-
-// //Function to run app
-// function init(){
-//     questions();
-//     //inquirer.prompt(questions)
-//     .then(function(data){
-//         console.log(data.role);
-//         if (data.role == "Manager"){
-//             // inquirer.prompt(managerQuestions)
-//             // .then(function(resp){
-//             //     console.log(resp.officeNumber);
-//             // })
-//             createManager(data);           
-                                
-//             }
-        
-//         } )
-        
-//         // create function to call questions for ea employee role 
-//         // create Team array and upend objects into team array
-//         // Use team array to create HTML - I think!!!!
-        
-//     }
-            
-
-// function createManager(data){
-//     //let officeNum = inquirer.prompt(managerQuestions)
-//     //let newManager = new Manager(data.id, data.name, data.email, data.role, officeNum);      
-//     //console.log(officeNumber)
-//     inquirer.prompt(managerQuestions)
-//     .then(function(resp){        
-//         let newManager = new Manager(data.id, data.name, data.email, data.role, resp.officeNumber); 
-//         //console.log(newManager);
-//         teamMember.push(newManager);
-//         //console.log(teamMember);
-//         return teamMember;
-//     })   
-// }
-
-// async function makeTeam(){
-//     fs.writeFile('./dist/index.html', generateTeam(teamMember));
-// }
-
-// // calling the app
-// init();
-// //makeTeam()
