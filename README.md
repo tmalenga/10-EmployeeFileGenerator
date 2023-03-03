@@ -10,6 +10,7 @@ N/A
 - If the user would like to add a team member they will have to select what type of team member that they would like to create
 - This will generate further prompts to provide the relevant data
 - Upon completion when the user selects "create team" the team profile will be generated with the users input and displayed as a webpage
+- Download walkthrough video ![here](./EmployeePortfolioGenerator.webm)
 
 ## License
 Please refer to LICENSE in the repo
